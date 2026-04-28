@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Craft — Design Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --bg: #0b0d10;
+    --bg2: #111318;
+    --bg3: #161a22;
+    --card: #13161d;
+    --border: #1e2330;
+    --accent: #b8a4f8;
+    --accent2: #f0a8c8;
+    --accent3: #8ed8f0;
+    --text: #e8eaf2;
+    --text-dim: #7a8099;
+    --text-muted: #3e4459;
+    --glow: rgba(184, 164, 248, 0.25);
+    --glow2: rgba(240, 168, 200, 0.2);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Dot grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #1e2330 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Ambient glow blobs */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: -200px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle at center, rgba(184,164,248,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ambient-right {
+    position: fixed;
+    bottom: -300px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle at center, rgba(240,168,200,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ──────────────────────────────────────── NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 64px;
+    background: rgba(11, 13, 16, 0.82);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .nav-logo span {
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--accent);
+  }
+
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 9px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+
+  .nav-cta:hover {
+    background: rgba(184,164,248,0.1);
+    box-shadow: 0 0 18px var(--glow);
+  }
+
+  /* ──────────────────────────────────────── HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 64px 80px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(184,164,248,0.1);
+    border: 1px solid rgba(184,164,248,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    margin-bottom: 36px;
+  }
+
+  .hero-badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .hero-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 96px;
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -3px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .hero-name .highlight {
+    background: linear-gradient(120deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: -0.5px;
+    margin-bottom: 32px;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 520px;
+    line-height: 1.7;
+    margin: 0 auto 48px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #0b0d10;
+    padding: 14px 30px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: -0.2px;
+    box-shadow: 0 0 28px rgba(184,164,248,0.4), 0 4px 20px rgba(184,164,248,0.2);
+    transition: box-shadow 0.3s, transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 40px rgba(184,164,248,0.6), 0 4px 30px rgba(184,164,248,0.3);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 14px 30px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-scroll-indicator {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(to bottom, var(--text-muted), transparent);
+  }
+
+  /* Stats row */
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    width: 100%;
+    max-width: 560px;
+    justify-content: center;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -1px;
+  }
+
+  .stat-num span {
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* ──────────────────────────────────────── BIO */
+  .bio {
+    position: relative;
+    z-index: 1;
+    padding: 100px 64px;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .bio-left {
+    position: sticky;
+    top: 100px;
+  }
+
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .section-tag::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .bio-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .bio-heading em {
+    font-style: normal;
+    color: var(--accent2);
+  }
+
+  /* Avatar illustration */
+  .bio-avatar {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    margin-top: 16px;
+  }
+
+  .bio-avatar-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bio-right {
+    padding-top: 48px;
+  }
+
+  .bio-paragraph {
+    font-size: 18px;
+    line-height: 1.85;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+
+  .bio-paragraph strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .bio-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 36px;
+  }
+
+  .skill-tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 7px 18px;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 500;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .skill-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .skill-tag.accent {
+    border-color: rgba(184,164,248,0.4);
+    color: var(--accent);
+    background: rgba(184,164,248,0.08);
+  }
+
+  .skill-tag.accent2 {
+    border-color: rgba(240,168,200,0.4);
+    color: var(--accent2);
+    background: rgba(240,168,200,0.08);
+  }
+
+  .skill-tag.accent3 {
+    border-color: rgba(142,216,240,0.4);
+    color: var(--accent3);
+    background: rgba(142,216,240,0.08);
+  }
+
+  .bio-clients {
+    margin-top: 48px;
+    padding: 28px 32px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+
+  .bio-clients-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .bio-clients-list {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .client-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: -0.3px;
+    transition: color 0.2s;
+  }
+
+  .client-name:hover {
+    color: var(--text-dim);
+  }
+
+  /* ──────────────────────────────────────── PROJECTS */
+  .projects {
+    position: relative;
+    z-index: 1;
+    padding: 100px 64px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .projects-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 56px;
+  }
+
+  .projects-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .projects-heading em {
+    font-style: normal;
+    color: var(--accent3);
+  }
+
+  .projects-count {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding-bottom: 4px;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .project-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(184,164,248,0.12);
+  }
+
+  .project-card:nth-child(2):hover {
+    border-color: var(--accent2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(240,168,200,0.12);
+  }
+
+  .project-card:nth-child(3):hover {
+    border-color: var(--accent3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(142,216,240,0.12);
+  }
+
+  .project-card:nth-child(4):hover {
+    border-color: var(--accent2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(240,168,200,0.12);
+  }
+
+  .project-card:nth-child(5):hover {
+    border-color: var(--accent3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(142,216,240,0.12);
+  }
+
+  .project-card:nth-child(6):hover {
+    border-color: var(--accent);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(184,164,248,0.12);
+  }
+
+  .project-thumb {
+    width: 100%;
+    aspect-ratio: 16/10;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Thumbnail 1 — Brand Identity */
+  .thumb-1 {
+    background: linear-gradient(135deg, #1a1040 0%, #2d1b5e 50%, #1a0d3a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Thumbnail 2 — App UI */
+  .thumb-2 {
+    background: linear-gradient(135deg, #0f1f2e 0%, #1a3545 50%, #0a1a2a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Thumbnail 3 — Motion */
+  .thumb-3 {
+    background: linear-gradient(135deg, #1a0f20 0%, #2e1640 50%, #140a1a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Thumbnail 4 */
+  .thumb-4 {
+    background: linear-gradient(135deg, #0f201a 0%, #173a2d 50%, #0a1a14 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Thumbnail 5 */
+  .thumb-5 {
+    background: linear-gradient(135deg, #201010 0%, #3a1a1a 50%, #1a0a0a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Thumbnail 6 */
+  .thumb-6 {
+    background: linear-gradient(135deg, #101520 0%, #1a2535 50%, #0a1015 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(11,13,16,0);
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-card:hover .project-thumb-overlay {
+    background: rgba(11,13,16,0.3);
+  }
+
+  .overlay-btn {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s, transform 0.3s;
+    background: rgba(184,164,248,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .project-card:hover .overlay-btn {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .project-info {
+    padding: 24px 28px 26px;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .project-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  .tag-v { background: rgba(184,164,248,0.12); color: var(--accent); }
+  .tag-p { background: rgba(240,168,200,0.12); color: var(--accent2); }
+  .tag-b { background: rgba(142,216,240,0.12); color: var(--accent3); }
+
+  .project-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.4px;
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .project-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-year {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .project-arrow {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    font-size: 13px;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .project-card:hover .project-arrow {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(184,164,248,0.1);
+  }
+
+  /* ──────────────────────────────────────── FOOTER / CONTACT */
+  .contact-footer {
+    position: relative;
+    z-index: 1;
+    margin-top: 40px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 100px 64px 60px;
+  }
+
+  .contact-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .contact-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .contact-top {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    margin-bottom: 80px;
+    align-items: start;
+  }
+
+  .contact-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 62px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .contact-heading .grad {
+    background: linear-gradient(120deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .contact-subtext {
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    max-width: 440px;
+    margin-bottom: 40px;
+  }
+
+  .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #0b0d10;
+    padding: 16px 36px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 0 32px rgba(184,164,248,0.35), 0 4px 24px rgba(184,164,248,0.2);
+    transition: box-shadow 0.3s, transform 0.2s;
+    letter-spacing: -0.2px;
+  }
+
+  .contact-btn:hover {
+    box-shadow: 0 0 50px rgba(184,164,248,0.55), 0 4px 36px rgba(184,164,248,0.3);
+    transform: translateY(-2px);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 8px;
+  }
+
+  .contact-link-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    group: true;
+  }
+
+  .contact-link-item:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(184,164,248,0.1);
+  }
+
+  .contact-link-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .icon-email { background: rgba(184,164,248,0.12); }
+  .icon-dribbble { background: rgba(240,168,200,0.12); }
+  .icon-linkedin { background: rgba(142,216,240,0.12); }
+  .icon-twitter { background: rgba(184,164,248,0.12); }
+
+  .contact-link-text {
+    flex: 1;
+  }
+
+  .contact-link-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .contact-link-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+
+  .contact-link-item:hover .contact-link-value {
+    color: var(--text);
+  }
+
+  .contact-link-arrow {
+    color: var(--text-muted);
+    font-size: 18px;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .contact-link-item:hover .contact-link-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  /* Footer bottom */
+  .footer-bottom {
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .footer-logo span {
+    color: var(--accent);
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .footer-nav a {
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .footer-nav a:hover {
+    color: var(--text-dim);
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ──────────────────────────────────────── DIVIDER */
+  .section-divider {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 64px;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ──────────────────────────────────────── SVG ILLUSTRATIONS */
+  /* Used inside project thumbs */
+
+</style>
+</head>
+<body>
+
+<div class="ambient-right"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Nova<span>Craft</span></div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#bio">About</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Let's Talk</a>
+</nav>
+
+<!-- ──────────────────── HERO -->
+<section class="hero" id="hero">
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    Available for new projects · 2025
+  </div>
+
+  <h1 class="hero-name">
+    <span class="highlight">Mira</span> Soleil
+  </h1>
+  <p class="hero-title">Product Designer &amp; Visual Storyteller</p>
+  <p class="hero-sub">
+    I craft digital experiences that feel intuitive, beautiful, and alive — blending sharp systems thinking with thoughtful visual craft.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#projects" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M9 4l5 4-5 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      View My Work
+    </a>
+    <a href="#contact" class="btn-secondary">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12v8a1 1 0 01-1 1H3a1 1 0 01-1-1V4zm0 0l6 5 6-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Get in Touch
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">7<span>+</span></div>
+      <div class="stat-label">Years experience</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">48<span>+</span></div>
+      <div class="stat-label">Projects shipped</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">22<span>+</span></div>
+      <div class="stat-label">Happy clients</div>
+    </div>
+  </div>
+
+  <div class="hero-scroll-indicator">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- ──────────────────── BIO -->
+<section class="bio" id="bio">
+  <div class="bio-left">
+    <div class="section-tag">About me</div>
+    <h2 class="bio-heading">
+      Design with<br>intention &amp; <em>soul</em>
+    </h2>
+    <div class="bio-avatar">
+      <div class="bio-avatar-inner">
+        <!-- SVG portrait illustration -->
+        <svg width="280" height="210" viewBox="0 0 280 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background shapes -->
+          <ellipse cx="140" cy="180" rx="90" ry="20" fill="#1a1d28" opacity="0.6"/>
+          <!-- Abstract figure -->
+          <circle cx="140" cy="70" r="42" fill="#1e2235"/>
+          <circle cx="140" cy="68" r="38" fill="#252840"/>
+          <!-- Face -->
+          <ellipse cx="140" cy="72" rx="22" ry="26" fill="#2e1f3a" opacity="0.6"/>
+          <!-- Hair accent -->
+          <path d="M115 55 Q140 35 165 55 Q160 42 140 38 Q120 42 115 55Z" fill="#b8a4f8" opacity="0.4"/>
+          <!-- Shoulders/body -->
+          <path d="M90 140 Q95 100 140 95 Q185 100 190 140 Q175 155 140 158 Q105 155 90 140Z" fill="#1e2235"/>
+          <!-- Collar accent -->
+          <path d="M125 95 L140 120 L155 95" stroke="#b8a4f8" stroke-width="2" fill="none" opacity="0.5"/>
+          <!-- Floating rings/accents -->
+          <circle cx="80" cy="60" r="12" stroke="#f0a8c8" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <circle cx="200" cy="80" r="8" stroke="#8ed8f0" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <circle cx="195" cy="45" r="5" fill="#b8a4f8" opacity="0.3"/>
+          <circle cx="78" cy="90" r="4" fill="#f0a8c8" opacity="0.3"/>
+          <!-- Dots decoration -->
+          <circle cx="60" cy="130" r="2" fill="#b8a4f8" opacity="0.5"/>
+          <circle cx="68" cy="140" r="2" fill="#b8a4f8" opacity="0.3"/>
+          <circle cx="220" cy="130" r="2" fill="#8ed8f0" opacity="0.5"/>
+          <circle cx="212" cy="140" r="2" fill="#8ed8f0" opacity="0.3"/>
+          <!-- Name tag glow -->
+          <rect x="105" y="162" width="70" height="22" rx="6" fill="#1a1d28" stroke="#b8a4f8" stroke-width="1" opacity="0.5"/>
+          <text x="140" y="177" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="10" fill="#b8a4f8" opacity="0.8" font-weight="600">MIRA SOLEIL</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="bio-right">
+    <p class="bio-paragraph">
+      Hello! I'm Mira — a <strong>product designer and visual craftsperson</strong> based in Amsterdam. Over the past seven years I've worked at the intersection of brand identity, digital product design, and motion, helping startups and scale-ups turn complex ideas into experiences people love.
+    </p>
+    <p class="bio-paragraph">
+      My process starts with <strong>deep listening</strong>. Before a single pixel hits the canvas, I spend time understanding your users, your constraints, and the story you want to tell. I believe the best design is both logical and emotional — it solves problems and <strong>creates genuine delight</strong>.
+    </p>
+    <p class="bio-paragraph">
+      When I'm not designing, you'll find me shooting 35mm film, sketching typefaces in coffee shops, or obsessing over the kinetic typography in old film title sequences.
+    </p>
+
+    <div class="bio-skills">
+      <span class="skill-tag accent">Product Design</span>
+      <span class="skill-tag accent2">Brand Identity</span>
+      <span class="skill-tag accent3">Motion Design</span>
+      <span class="skill-tag">Figma</span>
+      <span class="skill-tag">Design Systems</span>
+      <span class="skill-tag">User Research</span>
+      <span class="skill-tag">Prototyping</span>
+      <span class="skill-tag accent">Typography</span>
+      <span class="skill-tag">Illustration</span>
+      <span class="skill-tag accent2">Art Direction</span>
+      <span class="skill-tag">Interaction Design</span>
+    </div>
+
+    <div class="bio-clients">
+      <div class="bio-clients-label">Trusted by</div>
+      <div class="bio-clients-list">
+        <span class="client-name">Luminary</span>
+        <span class="client-name">Arcvault</span>
+        <span class="client-name">Kindra</span>
+        <span class="client-name">Prism Labs</span>
+        <span class="client-name">Velour</span>
+        <span class="client-name">Stelo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ──────────────────── PROJECTS -->
+<section class="projects" id="projects">
+  <div class="projects-header">
+    <div>
+      <div class="section-tag">Selected Work</div>
+      <h2 class="projects-heading">
+        Things I've<br><em>built &amp; shipped</em>
+      </h2>
+    </div>
+    <div class="projects-count">Showing 6 of 48 projects</div>
+  </div>
+
+  <div class="project-grid">
+
+    <!-- Card 1 -->
+    <div class="project-card">
+      <div class="project-thumb thumb-1">
+        <div class="project-thumb-overlay">
+          <span class="overlay-btn">View Case Study</span>
+        </div>
+        <svg width="100%" height="100%" viewBox="0 0 360 225" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <!-- Arcvault brand identity -->
+          <rect width="360" height="225" fill="#1a1040"/>
+          <circle cx="180" cy="112" r="70" stroke="#b8a4f8" stroke-width="1" fill="none" opacity="0.3"/>
+          <circle cx="180" cy="112" r="50" stroke="#b8a4f8" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <circle cx="180" cy="112" r="30" stroke="#b8a4f8" stroke-width="2" fill="none" opacity="0.5"/>
+          <!-- Logo mark -->
+          <polygon points="180,82 205,127 155,127" stroke="#b8a4f8" stroke-width="2.5" fill="rgba(184,164,248,0.1)"/>
+          <line x1="180" y1="82" x2="180" y2="60" stroke="#b8a4f8" stroke-width="1.5" opacity="0.5"/>
+          <!-- Decorative lines -->
+          <line x1="80" y1="112" x2="120" y2="112" stroke="#b8a4f8" stroke-width="1" opacity="0.3"/>
+          <line x1="240" y1="112" x2="280" y2="112" stroke="#b8a4f8" stroke-width="1" opacity="0.3"/>
+          <!-- Glow centre -->
+          <circle cx="180" cy="112" r="8" fill="#b8a4f8" opacity="0.6"/>
+          <circle cx="180" cy="112" r="4" fill="#fff" opacity="0.8"/>
+          <!-- Corner accents -->
+          <rect x="20" y="20" width="20" height="2" fill="#b8a4f8" opacity="0.3"/>
+          <rect x="20" y="20" width="2" height="20" fill="#b8a4f8" opacity="0.3"/>
+          <rect x="320" y="20" width="20" height="2" fill="#b8a4f8" opacity="0.3"/>
+          <rect x="338" y="20" width="2" height="20" fill="#b8a4f8" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag tag-v">Branding</span>
+          <span class="project-tag tag-v">Identity</span>
+        </div>
+        <h3 class="project-name">Arcvault Brand Identity</h3>
+        <p class="project-desc">Complete visual identity for a next-gen digital archive platform — logo system, typography, colour language, and brand guidelines spanning 80+ pages.</p>
+        <div class="project-meta">
+          <span class="project-year">2024</span>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="project-card">
+      <div class="project-thumb thumb-2">
+        <div class="project-thumb-overlay">
+          <span class="overlay-btn">View Case Study</span>
+        </div>
+        <svg width="100%" height="100%" viewBox="0 0 360 225" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <!-- App UI mockup -->
+          <rect width="360" height="225" fill="#0f1f2e"/>
+          <!-- Phone frame -->
+          <rect x="125" y="18" width="110" height="190" rx="16" fill="#0b0d10" stroke="#1e2d3d" stroke-width="1.5"/>
+          <rect x="130" y="26" width="100" height="174" rx="12" fill="#0f1820"/>
+          <!-- Status bar -->
+          <rect x="130" y="26" width="100" height="22" rx="12" fill="#111e2a"/>
+          <!-- Content rows -->
+          <rect x="138" y="58" width="60" height="6" rx="3" fill="#1e3a4a" opacity="0.8"/>
+          <rect x="138" y="70" width="40" height="5" rx="2.5" fill="#1e3a4a" opacity="0.5"/>
+          <!-- Card in app -->
+          <rect x="138" y="84" width="84" height="52" rx="8" fill="#152232"/>
+          <circle cx="152" cy="98" r="8" fill="#8ed8f0" opacity="0.5"/>
+          <rect x="165" y="93" width="42" height="5" rx="2.5" fill="#2a4055"/>
+          <rect x="165" y="102" width="30" height="4" rx="2" fill="#1e3040"/>
+          <rect x="138" y="114" width="50" height="5" rx="2.5" fill="#1e3040" opacity="0.7"/>
+          <!-- Bottom nav -->
+          <rect x="130" y="178" width="100" height="22" rx="0" fill="#111e2a"/>
+          <circle cx="155" cy="189" r="4" fill="#8ed8f0" opacity="0.5"/>
+          <circle cx="180" cy="189" r="4" fill="#1e3a4a"/>
+          <circle cx="205" cy="189" r="4" fill="#1e3a4a"/>
+          <!-- Floating chart lines on background -->
+          <polyline points="20,160 50,140 80,150 110,120 140,130" stroke="#8ed8f0" stroke-width="1.5" fill="none" opacity="0.2"/>
+          <polyline points="250,170 280,145 310,155 340,125" stroke="#8ed8f0" stroke-width="1.5" fill="none" opacity="0.2"/>
+        </svg>
+      </div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag tag-p">Product</span>
+          <span class="project-tag tag-b">Mobile</span>
+        </div>
+        <h3 class="project-name">Kindra Finance App</h3>
+        <p class="project-desc">End-to-end product design for a personal finance app serving 120K users. Redesigned onboarding, dashboard, and transaction views — boosting activation by 34%.</p>
+        <div class="project-meta">
+          <span class="project-year">2024</span>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="project-card">
+      <div class="project-thumb thumb-3">
+        <div class="project-thumb-overlay">
+          <span class="overlay-btn">View Case Study</span>
+        </div>
+        <svg width="100%" height="100%" viewBox="0 0 360 225" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <!-- Motion design / title sequence -->
+          <rect width="360" height="225" fill="#1a0f20"/>
+          <!-- Waveform lines -->
+          <path d="M0,112 Q30,80 60,112 Q90,144 120,112 Q150,80 180,112 Q210,144 240,112 Q270,80 300,112 Q330,144 360,112" stroke="#f0a8c8" stroke-width="2" fill="none" opacity="0.5"/>
+          <path d="M0,112 Q45,70 90,112 Q135,154 180,112 Q225,70 270,112 Q315,154 360,112" stroke="#f0a8c8" stroke-width="1" fill="none" opacity="0.25"/>
+          <path d="M0,112 Q20,95 40,112 Q60,129 80,112 Q100,95 120,112 Q140,129 160,112 Q180,95 200,112 Q220,129 240,112 Q260,95 280,112 Q300,129 320,112 Q340,95 360,112" stroke="#b8a4f8" stroke-width="1.5" fill="none" opacity="0.35"/>
+          <!-- Large letters -->
+          <text x="50" y="100" font-family="Space Grotesk, sans-serif" font-size="72" font-weight="700" fill="#f0a8c8" opacity="0.08">M</text>
+          <text x="150" y="140" font-family="Space Grotesk, sans-serif" font-size="72" font-weight="700" fill="#b8a4f8" opacity="0.08">O</text>
+          <text x="230" y="100" font-family="Space Grotesk, sans-serif" font-size="72" font-weight="700" fill="#f0a8c8" opacity="0.08">V</text>
+          <!-- Centre text -->
+          <text x="180" y="106" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="22" font-weight="700" fill="#f0a8c8" opacity="0.9" letter-spacing="6">LUMINARY</text>
+          <text x="180" y="124" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" font-weight="400" fill="#f0a8c8" opacity="0.5" letter-spacing="4">TITLE SEQUENCE</text>
+          <!-- Frame marks -->
+          <line x1="20" y1="20" x2="20" y2="35" stroke="#f0a8c8" stroke-width="1" opacity="0.4"/>
+          <line x1="20" y1="20" x2="35" y2="20" stroke="#f0a8c8" stroke-width="1" opacity="0.4"/>
+          <line x1="340" y1="20" x2="325" y2="20" stroke="#f0a8c8" stroke-width="1" opacity="0.4"/>
+          <line x1="340" y1="20" x2="340" y2="35" stroke="#f0a8c8" stroke-width="1" opacity="0.4"/>
+          <line x1="20" y1="205" x2="20" y2="190" stroke="#f0a8c8" stroke-width="1" opacity="0.4"/>
+          <line x1="20" y1="205" x2="35" y2="205" stroke="#f0a8c8" stroke-width="1" opacity="0.4"/>
+          <line x1="340" y1="205" x2="325" y2="205" stroke="#f0a8c8" stroke-width="1" opacity="0.4"/>
+          <line x1="340" y1="205" x2="340" y2="190" stroke="#f0a8c8" stroke-width="1" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag tag-p">Motion</span>
+          <span class="project-tag tag-v">Direction</span>
+        </div>
+        <h3 class="project-name">Luminary Title Sequence</h3>
+        <p class="project-desc">Art direction and motion design for Luminary Media's brand launch — a 90-second title sequence combining kinetic typography and fluid abstract visuals.</p>
+        <div class="project-meta">
+          <span class="project-year">2023</span>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="project-card">
+      <div class="project-thumb thumb-4">
+        <div class="project-thumb-overlay">
+          <span class="overlay-btn">View Case Study</span>
+        </div>
+        <svg width="100%" height="100%" viewBox="0 0 360 225" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <!-- Design system / component library -->
+          <rect width="360" height="225" fill="#0f201a"/>
+          <!-- Grid of component cards -->
+          <!-- Row 1 -->
+          <rect x="20" y="22" width="72" height="52" rx="6" fill="#152820" stroke="#1e3a2e" stroke-width="1"/>
+          <rect x="30" y="36" width="40" height="6" rx="3" fill="#2a5040"/>
+          <rect x="30" y="46" width="30" height="4" rx="2" fill="#1e3a2e"/>
+          <rect x="30" y="54" width="35" height="4" rx="2" fill="#1e3a2e"/>
+          
+          <rect x="100" y="22" width="72" height="52" rx="6" fill="#152820" stroke="#1e3a2e" stroke-width="1"/>
+          <circle cx="136" cy="40" r="10" fill="#8ed8f0" opacity="0.2"/>
+          <circle cx="136" cy="40" r="6" fill="#8ed8f0" opacity="0.3"/>
+          <rect x="110" y="55" width="52" height="4" rx="2" fill="#1e3a2e"/>
+          <rect x="118" y="63" width="36" height="4" rx="2" fill="#1e3a2e"/>
+          
+          <rect x="180" y="22" width="72" height="52" rx="6" fill="#152820" stroke="#2a5040" stroke-width="1.5"/>
+          <rect x="188" y="34" width="56" height="28" rx="4" fill="#1e3a2e"/>
+          <rect x="192" y="38" width="30" height="4" rx="2" fill="#2a5040"/>
+          <rect x="192" y="46" width="20" height="4" rx="2" fill="#1e3a2e"/>
+          <!-- Active badge -->
+          <rect x="190" y="54" width="36" height="10" rx="5" fill="#8ed8f0" opacity="0.15" stroke="#8ed8f0" stroke-width="0.8"/>
+          <text x="208" y="62" text-anchor="middle" font-family="Inter" font-size="6" fill="#8ed8f0" opacity="0.8">SELECTED</text>
+          
+          <rect x="260" y="22" width="80" height="52" rx="6" fill="#152820" stroke="#1e3a2e" stroke-width="1"/>
+          <rect x="268" y="38" width="60" height="12" rx="6" fill="#1e3a2e"/>
+          <circle cx="278" cy="44" r="5" fill="#8ed8f0" opacity="0.3"/>
+          <rect x="268" y="56" width="50" height="4" rx="2" fill="#1e3a2e"/>
+          
+          <!-- Row 2 -->
+          <rect x="20" y="86" width="160" height="50" rx="6" fill="#152820" stroke="#1e3a2e" stroke-width="1"/>
+          <rect x="30" y="96" width="90" height="6" rx="3" fill="#2a5040" opacity="0.8"/>
+          <rect x="30" y="106" width="140" height="4" rx="2" fill="#1e3a2e"/>
+          <rect x="30" y="114" width="120" height="4" rx="2" fill="#1e3a2e"/>
+          <rect x="30" y="124" width="50" height="6" rx="3" fill="#8ed8f0" opacity="0.15"/>
+          
+          <rect x="188" y="86" width="152" height="50" rx="6" fill="#152820" stroke="#1e3a2e" stroke-width="1"/>
+          <polyline points="200,128 220,108 240,118 260,98 280,110 300,92 320,104 330,100" stroke="#8ed8f0" stroke-width="2" fill="none" opacity="0.6"/>
+          <circle cx="300" cy="92" r="3" fill="#8ed8f0" opacity="0.8"/>
+          
+          <!-- Bottom annotation line -->
+          <line x1="20" y1="155" x2="340" y2="155" stroke="#1e3a2e" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="180" y="168" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="10" fill="#8ed8f0" opacity="0.4" letter-spacing="3">PRISM DESIGN SYSTEM v2.0</text>
+        </svg>
+      </div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag tag-b">Design System</span>
+          <span class="project-tag tag-p">Product</span>
+        </div>
+        <h3 class="project-name">Prism Design System</h3>
+        <p class="project-desc">Built a comprehensive design system from scratch for Prism Labs — 200+ components, documentation site, and Figma token architecture adopted by a 12-person design team.</p>
+        <div class="project-meta">
+          <span class="project-year">2023</span>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="project-card">
+      <div class="project-thumb thumb-5">
+        <div class="project-thumb-overlay">
+          <span class="overlay-btn">View Case Study</span>
+        </div>
+        <svg width="100%" height="100%" viewBox="0 0 360 225" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <!-- E-commerce / Velour fashion -->
+          <rect width="360" height="225" fill="#201010"/>
+          <!-- Product card mockup -->
+          <rect x="60" y="20" width="100" height="130" rx="10" fill="#2a1010" stroke="#3a2020" stroke-width="1"/>
+          <!-- Product image area -->
+          <rect x="65" y="25" width="90" height="90" rx="6" fill="#1a0a0a"/>
+          <!-- Abstract garment shape -->
+          <path d="M95,30 L115,30 L120,40 L125,30 L145,30 L140,50 L135,50 L135,115 L95,115 L95,50 L90,50 Z" fill="#3a2020" opacity="0.6"/>
+          <path d="M97,32 L113,32 L118,42 L123,32 L143,32 L138,50 L133,50 L133,113 L97,113 L97,50 L92,50 Z" stroke="#f0a8c8" stroke-width="0.8" fill="none" opacity="0.4"/>
+          <!-- Product info -->
+          <rect x="68" y="120" width="55" height="5" rx="2.5" fill="#3a2020"/>
+          <rect x="68" y="130" width="35" height="5" rx="2.5" fill="#f0a8c8" opacity="0.5"/>
+          <rect x="68" y="140" width="60" height="6" rx="3" fill="#f0a8c8" opacity="0.2"/>
+          
+          <!-- Second product card -->
+          <rect x="175" y="30" width="90" height="115" rx="10" fill="#2a1010" stroke="#3a2020" stroke-width="1"/>
+          <rect x="180" y="35" width="80" height="75" rx="6" fill="#1a0a0a"/>
+          <!-- Different garment -->
+          <ellipse cx="220" cy="65" rx="22" ry="30" fill="#3a1a1a" opacity="0.6"/>
+          <ellipse cx="220" cy="65" rx="18" ry="26" stroke="#f0a8c8" stroke-width="0.8" fill="none" opacity="0.4"/>
+          <rect x="183" y="115" width="50" height="4" rx="2" fill="#3a2020"/>
+          <rect x="183" y="124" width="30" height="4" rx="2" fill="#f0a8c8" opacity="0.4"/>
+          
+          <!-- Background label -->
+          <text x="180" y="200" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="42" font-weight="700" fill="#f0a8c8" opacity="0.05" letter-spacing="-2">VELOUR</text>
+          <!--

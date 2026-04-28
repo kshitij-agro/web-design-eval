@@ -161,23 +161,78 @@ for rendering the agent's output at verify time.
 
 ## 5. Recipe design
 
+### 5.0 Tooling split: renderer vs. grader
+
+It is worth being explicit because the two are easy to conflate:
+
+| Concern | Tool | Used at |
+|---------|------|---------|
+| **Rendering** HTML → PNG | Playwright (headless Chromium) | Generation time (reference) **and** verify time (agent output) |
+| **Scoring** PNG vs. PNG (continuous) | scikit-image SSIM + OpenCV (layout) + scipy (colour EMD) | Verify time only |
+
+Playwright is *only* a renderer in this pipeline. It does ship a built-in
+visual-comparison API (`expect(page).to_have_screenshot()` /
+[`pixelmatch`](https://github.com/mapbox/pixelmatch)), but that is designed
+for visual-regression testing — pass/fail against a pixel-count threshold,
+not a continuous similarity score. We deliberately don't use it as the
+grader. The continuous score is computed by the grader described in §7.
+
 ### 5.1 High-level flow
 
+There are three phases. Note carefully which artefacts are produced when —
+nothing in the verify phase is created by the agent except
+`/app/output/index.html`.
+
+#### Phase 1 — Generation (offline, once per task)
+
 ```
-generator (offline)                          harbor run (per trial, per task)
-─────────────────────                        ─────────────────────────────
-archetype × style × seed                     COPY reference.png → /app/
-        │                                    agent reads /app/reference.png
-        ▼                                    agent writes /app/output/index.html
-LLM (Claude Sonnet) → index.html             tests/test.sh:
-        │                                      playwright render output → png
-        ▼                                      compare vs /tests/reference.png
-playwright render → reference.png              compute weighted continuous score
-        │                                      write reward.txt + reward.json
+archetype × style × seed
+        │
         ▼
-stamp Harbor task dir
-(environment, tests, solution, instruction.md, task.toml)
+LLM (Claude Sonnet) ─────────── reference index.html
+        │
+        ▼
+Playwright render (1280×900, full_page) ────── reference.png
 ```
+
+Outputs of this phase are static files on the author's machine.
+
+#### Phase 2 — Bundling (offline, stamps a Harbor task dir)
+
+The same `reference.png` is placed in **two** locations inside the task
+directory, with different roles:
+
+| Path in task dir | Path inside container at runtime | Visible to | Purpose |
+|------------------|----------------------------------|------------|---------|
+| `environment/reference.png` | `/app/reference.png` | **Agent** | The screenshot the agent must replicate. Baked into the image via `COPY` in the Dockerfile. |
+| `tests/reference.png` | `/tests/reference.png` | **Verifier only** | Private ground truth used by the grader. Copied alongside `test.sh` at verify time; agent has no access. |
+
+Plus the reference HTML lands in `solution/index.html` (oracle only — see §"oracle solution" discussion).
+
+#### Phase 3 — `harbor run` (per trial, inside the container)
+
+```
+container starts with /app/reference.png already baked in
+        │
+        ▼
+Claude Code (Opus 4.6) reads /app/reference.png
+        │
+        ▼
+Claude Code writes /app/output/index.html      ← the only file the agent produces
+        │
+        ▼  (verify time)
+tests/test.sh runs:
+  1. Playwright renders /app/output/index.html  → /tmp/agent.png
+  2. grader compares /tmp/agent.png             ← agent-rendered, fresh per trial
+                vs /tests/reference.png         ← bundled at generation time, static
+     (using SSIM + colour EMD + layout IoU + height penalty — see §7)
+  3. write scalar to /logs/verifier/reward.txt
+     write breakdown to /logs/verifier/reward.json
+```
+
+So at verify time, the *only* PNG generated inside the container is the
+agent's render (`/tmp/agent.png`). `/tests/reference.png` is read-only,
+bundled with the task, identical for every trial.
 
 ### 5.2 Diversity axes
 
@@ -290,24 +345,32 @@ container after the agent finishes.
 
 ### 7.1 Pipeline
 
+The grader is two stages: **render**, then **score**. Playwright handles only
+the render step (cf. §5.0); all continuous scoring is done in-process with
+scikit-image / OpenCV / scipy.
+
 1. Locate agent output: `/app/output/index.html`. If missing → reward = 0,
    exit cleanly.
-2. Render with Playwright at 1280×900, `full_page=True` → `agent.png`.
-3. Resize agent.png and reference.png to a common reference height for fair
-   comparison (preserve aspect within reason; record height ratio for the
-   penalty term).
-4. Compute components.
+2. **Render** with Playwright (Chromium, headless) at 1280×900,
+   `full_page=True` → `agent.png`. Same browser build as was used to render
+   the reference, so the comparison is apples to apples. Playwright is *not*
+   doing any comparison here.
+3. Resize `agent.png` and `reference.png` to a common reference height for
+   fair comparison (preserve aspect within reason; record height ratio for
+   the penalty term).
+4. **Score** — compute the four components below using
+   scikit-image / OpenCV / scipy.
 5. Combine into a weighted scalar.
 6. Write `reward.txt` (scalar) and `reward.json` (breakdown).
 
-### 7.2 Components
+### 7.2 Components (all computed in pure Python, no Playwright)
 
-| Component | Method | Weight | Notes |
-|-----------|--------|--------|-------|
-| **Visual structural similarity** | SSIM (`scikit-image`) on grayscale, multi-scale | 0.40 | Robust to small text shifts. |
-| **Colour palette match** | Histogram earth-mover's distance over k-means CIELAB clusters | 0.25 | Catches palette mismatch even if layout differs. |
-| **Layout IoU** | OpenCV connected-components on grayscale gradient → bounding boxes → matched IoU between sets | 0.25 | Rewards getting block placement right even with imperfect content. |
-| **Aspect/height penalty** | `1 − min(1, |h_agent − h_ref| / h_ref)` | 0.10 | Clipped; a 50%-too-tall page gets a 0.5 multiplier on this term. |
+| Component | Library / function | Weight | Notes |
+|-----------|--------------------|--------|-------|
+| **Visual structural similarity** | `skimage.metrics.structural_similarity` (SSIM) on grayscale, multi-scale | 0.40 | Robust to small text shifts. |
+| **Colour palette match** | k-means in CIELAB → `scipy.stats.wasserstein_distance` (earth-mover's) over the cluster histograms | 0.25 | Catches palette mismatch even if layout differs. |
+| **Layout IoU** | `cv2.connectedComponentsWithStats` on a grayscale-gradient mask → bounding boxes → matched IoU between sets | 0.25 | Rewards getting block placement right even with imperfect content. |
+| **Aspect/height penalty** | `1 − min(1, |h_agent − h_ref| / h_ref)`, plain numpy | 0.10 | Clipped; a 50%-too-tall page gets a 0.5 multiplier on this term. |
 
 Weights are starting points; tunable based on what correlates with human
 visual judgment on the demo runs.
