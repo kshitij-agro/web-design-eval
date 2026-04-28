@@ -97,7 +97,7 @@ def generate_one(
             html_path = target / "index.html"
             png_path = target / "reference.png"
             html_path.write_text(html, encoding="utf-8")
-            render_html_to_png(html, png_path)
+            render_html_to_png(html_path, png_path)
             validate_png(png_path)
         except GenerationRejected as e:
             log.warning("Rejected: %s", e)

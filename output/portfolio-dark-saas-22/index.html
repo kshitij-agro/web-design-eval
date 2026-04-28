@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Vesper Studio — Design Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0d0a08;
+    --surface:  #161210;
+    --card:     #1c1713;
+    --border:   #2d2520;
+    --accent:   #f5813e;
+    --accent2:  #e8592a;
+    --glow:     rgba(245,129,62,0.45);
+    --glow2:    rgba(245,129,62,0.15);
+    --text:     #f0ebe5;
+    --muted:    #8a7f75;
+    --dim:      #5a5048;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── DOT GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #2d2520 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .layer { position: relative; z-index: 1; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 64px;
+    height: 64px;
+    background: rgba(13,10,8,0.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #0d0a08 !important;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    box-shadow: 0 0 18px var(--glow);
+    transition: box-shadow 0.2s, transform 0.15s !important;
+  }
+
+  .nav-cta:hover {
+    box-shadow: 0 0 32px var(--glow) !important;
+    transform: translateY(-1px);
+    color: #0d0a08 !important;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 64px 80px;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(245,129,62,0.3);
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 40px;
+    background: rgba(245,129,62,0.07);
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .hero-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 96px;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-title {
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin-bottom: 48px;
+  }
+
+  .hero-title strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0d0a08;
+    padding: 14px 34px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    box-shadow: 0 0 24px var(--glow), 0 4px 20px rgba(0,0,0,0.4);
+    transition: box-shadow 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 44px var(--glow), 0 8px 30px rgba(0,0,0,0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    color: var(--text);
+    padding: 14px 34px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 15px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    transition: border-color 0.2s, background 0.2s;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    background: rgba(245,129,62,0.06);
+  }
+
+  .hero-scroll {
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--dim);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  /* ── GLOW ORBS ── */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(245,129,62,0.18) 0%, transparent 70%);
+    top: 10%; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .orb-2 {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(232,89,42,0.12) 0%, transparent 70%);
+    top: 60%; right: 8%;
+  }
+
+  /* ── STATS ROW ── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(22,18,16,0.6);
+    backdrop-filter: blur(8px);
+    position: relative; z-index: 1;
+  }
+
+  .stat-item {
+    flex: 1;
+    max-width: 260px;
+    padding: 36px 24px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 96px 64px;
+    position: relative; z-index: 1;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 48px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  /* ── BIO ── */
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.7fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .bio-portrait {
+    position: relative;
+  }
+
+  .portrait-frame {
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+    background: var(--card);
+  }
+
+  .portrait-bg {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #2a1f14 0%, #1a1008 40%, #2d1e0e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* SVG portrait illustration */
+  .portrait-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(13,10,8,0.8));
+    z-index: 2;
+  }
+
+  .portrait-accent {
+    position: absolute;
+    bottom: -12px; right: -12px;
+    width: 80px; height: 80px;
+    border-radius: 12px;
+    background: var(--accent);
+    z-index: -1;
+    box-shadow: 0 0 30px var(--glow);
+  }
+
+  .bio-content { }
+
+  .bio-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 44px;
+    line-height: 1.15;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  .bio-heading em { font-style: italic; color: var(--accent); }
+
+  .bio-text {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .bio-text strong { color: var(--text); font-weight: 500; }
+
+  .bio-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 36px;
+  }
+
+  .skill-tag {
+    background: rgba(245,129,62,0.1);
+    border: 1px solid rgba(245,129,62,0.25);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 6px 14px;
+    border-radius: 100px;
+  }
+
+  /* ── PROJECT GRID ── */
+  .projects-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 56px;
+  }
+
+  .projects-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .projects-heading em { font-style: italic; color: var(--accent); }
+
+  .view-all {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid rgba(245,129,62,0.4);
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .view-all:hover { border-color: var(--accent); }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .project-card:hover {
+    border-color: rgba(245,129,62,0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(245,129,62,0.1);
+  }
+
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 16/10;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Project thumbnail designs via CSS */
+  .thumb-1 {
+    background: linear-gradient(135deg, #1a0e06 0%, #2d1a08 50%, #421f05 100%);
+  }
+
+  .thumb-2 {
+    background: linear-gradient(135deg, #06120d 0%, #0a2218 50%, #0e3020 100%);
+  }
+
+  .thumb-3 {
+    background: linear-gradient(135deg, #10060d 0%, #210f1e 50%, #350a2e 100%);
+  }
+
+  .thumb-4 {
+    background: linear-gradient(135deg, #06100d 0%, #080f20 50%, #0a0824 100%);
+  }
+
+  .thumb-5 {
+    background: linear-gradient(135deg, #150a00 0%, #2a1200 50%, #3d1900 100%);
+  }
+
+  .thumb-6 {
+    background: linear-gradient(135deg, #080610 0%, #120a20 50%, #1e0f30 100%);
+  }
+
+  .thumb-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .thumb-inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(13,10,8,0.7));
+  }
+
+  /* Decorative shapes in thumbnails */
+  .shape-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-body {
+    padding: 24px;
+  }
+
+  .card-category {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-year {
+    font-size: 11px;
+    color: var(--dim);
+    font-weight: 500;
+  }
+
+  .card-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: gap 0.2s;
+  }
+
+  .card-link:hover { gap: 10px; }
+
+  .card-link svg { transition: transform 0.2s; }
+
+  .project-card:hover .card-link svg { transform: translateX(3px); }
+
+  /* ── CONTACT FOOTER ── */
+  .contact-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .contact-glow {
+    position: absolute;
+    top: -120px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(245,129,62,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .contact-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 96px 64px 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-left { }
+
+  .contact-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .contact-heading em { font-style: italic; color: var(--accent); }
+
+  .contact-subtext {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    margin-bottom: 40px;
+    max-width: 420px;
+  }
+
+  .contact-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .contact-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(245,129,62,0.12);
+    border: 1px solid rgba(245,129,62,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact-info-label {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .contact-info-val {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Contact form */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .form-input, .form-textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--accent);
+    background: rgba(245,129,62,0.05);
+  }
+
+  .form-textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+
+  .form-submit {
+    background: var(--accent);
+    color: #0d0a08;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 24px var(--glow);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.02em;
+    transition: box-shadow 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+
+  .form-submit:hover {
+    box-shadow: 0 0 40px var(--glow);
+    transform: translateY(-2px);
+  }
+
+  /* ── FOOTER BAR ── */
+  .footer-bar {
+    border-top: 1px solid var(--border);
+    position: relative; z-index: 1;
+    background: var(--surface);
+  }
+
+  .footer-bar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    color: var(--dim);
+  }
+
+  .footer-copy a { color: var(--accent); text-decoration: none; }
+
+  .footer-socials {
+    display: flex;
+    gap: 20px;
+  }
+
+  .social-link {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .social-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(245,129,62,0.08);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 0 64px;
+    position: relative; z-index: 1;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="layer">
+  <div class="nav-logo">Vesper<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#bio">About</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero layer" style="position:relative;">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-eyebrow">Available for freelance projects</div>
+
+  <h1 class="hero-name">
+    Mara <em>Vesper</em>
+  </h1>
+
+  <p class="hero-title">
+    <strong>Product & Brand Designer</strong> — crafting interfaces that feel inevitable
+  </p>
+
+  <div class="hero-actions">
+    <a href="#projects" class="btn-primary">View My Work</a>
+    <a href="#contact" class="btn-ghost">Get in Touch</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats layer">
+  <div class="stat-item">
+    <div class="stat-num">7+</div>
+    <div class="stat-label">Years of Experience</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">48</div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">23</div>
+    <div class="stat-label">Happy Clients</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">5</div>
+    <div class="stat-label">Awards Won</div>
+  </div>
+</div>
+
+<!-- BIO -->
+<div id="bio" class="section">
+  <div class="section-label">About Me</div>
+  <div class="bio-grid">
+
+    <div class="bio-portrait">
+      <div class="portrait-frame">
+        <div class="portrait-bg">
+          <!-- SVG portrait illustration -->
+          <svg width="260" height="340" viewBox="0 0 260 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Body/clothes -->
+            <ellipse cx="130" cy="310" rx="90" ry="50" fill="#1a1008"/>
+            <path d="M60 290 Q80 260 130 255 Q180 260 200 290 L210 340 H50 Z" fill="#2d1e10"/>
+            <!-- Neck -->
+            <rect x="112" y="220" width="36" height="40" rx="6" fill="#c4855a"/>
+            <!-- Head -->
+            <ellipse cx="130" cy="185" rx="62" ry="70" fill="#c4855a"/>
+            <!-- Hair -->
+            <path d="M68 168 Q70 100 130 95 Q190 100 192 168 Q185 130 130 125 Q75 130 68 168Z" fill="#1a0c04"/>
+            <path d="M68 168 Q62 145 65 120 Q75 90 130 85 Q185 90 195 120 Q198 145 192 168" fill="#1a0c04"/>
+            <!-- Eyes -->
+            <ellipse cx="108" cy="185" rx="8" ry="9" fill="#1a0c04"/>
+            <ellipse cx="152" cy="185" rx="8" ry="9" fill="#1a0c04"/>
+            <ellipse cx="110" cy="183" rx="3" ry="3" fill="#fff" opacity="0.7"/>
+            <ellipse cx="154" cy="183" rx="3" ry="3" fill="#fff" opacity="0.7"/>
+            <!-- Nose -->
+            <path d="M127 195 Q130 207 133 195" stroke="#a06040" stroke-width="1.5" fill="none"/>
+            <!-- Mouth -->
+            <path d="M115 215 Q130 228 145 215" stroke="#a06040" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- Collar detail -->
+            <path d="M100 255 L130 265 L160 255" stroke="#f5813e" stroke-width="2" fill="none" opacity="0.6"/>
+            <!-- Accent dot earring -->
+            <circle cx="68" cy="195" r="4" fill="#f5813e"/>
+            <circle cx="192" cy="195" r="4" fill="#f5813e"/>
+          </svg>
+        </div>
+      </div>
+      <div class="portrait-accent"></div>
+    </div>
+
+    <div class="bio-content">
+      <div class="section-label">My Story</div>
+      <h2 class="bio-heading">Design is how I make<br>the world <em>make sense.</em></h2>
+
+      <p class="bio-text">
+        I'm <strong>Mara Vesper</strong>, a product and brand designer based in Amsterdam. Over the past seven years I've helped SaaS startups, creative agencies, and growth-stage companies transform rough ideas into polished digital experiences that users actually love.
+      </p>
+
+      <p class="bio-text">
+        My process starts with <strong>obsessive research</strong> — understanding the people behind the screens before touching a single frame. I merge systematic design thinking with an eye for warmth and craft, because the best interfaces feel both logical and human.
+      </p>
+
+      <p class="bio-text">
+        When I'm not pushing pixels, you'll find me sketching in coffee-stained notebooks, hunting for vintage type specimens, or convincing my houseplants to survive another Dutch winter.
+      </p>
+
+      <div class="bio-skills">
+        <span class="skill-tag">Product Design</span>
+        <span class="skill-tag">Brand Identity</span>
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">Design Systems</span>
+        <span class="skill-tag">UI/UX Research</span>
+        <span class="skill-tag">Motion Design</span>
+        <span class="skill-tag">Webflow</span>
+        <span class="skill-tag">Typography</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<div id="projects" class="section">
+  <div class="projects-header">
+    <div>
+      <div class="section-label">Selected Work</div>
+      <h2 class="projects-heading">Projects that<br>shaped my <em>craft</em></h2>
+    </div>
+    <a href="#contact" class="view-all">Request case study →</a>
+  </div>
+
+  <div class="project-grid">
+
+    <!-- Card 1 -->
+    <div class="project-card">
+      <div class="card-thumb thumb-1">
+        <div class="thumb-inner">
+          <svg width="100%" height="100%" viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="225" fill="url(#g1)"/>
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="360" y2="225" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1a0e06"/>
+                <stop offset="100%" stop-color="#3d1900"/>
+              </linearGradient>
+            </defs>
+            <!-- Dashboard mockup -->
+            <rect x="30" y="20" width="300" height="185" rx="10" fill="#1c1410" stroke="#2d2018" stroke-width="1"/>
+            <rect x="30" y="20" width="300" height="32" rx="10" fill="#221810"/>
+            <circle cx="50" cy="36" r="5" fill="#f5813e" opacity="0.7"/>
+            <circle cx="66" cy="36" r="5" fill="#e8592a" opacity="0.5"/>
+            <circle cx="82" cy="36" r="5" fill="#5a4030" opacity="0.5"/>
+            <!-- Content lines -->
+            <rect x="50" y="70" width="120" height="8" rx="4" fill="#f5813e" opacity="0.6"/>
+            <rect x="50" y="88" width="80" height="6" rx="3" fill="#5a4030" opacity="0.8"/>
+            <!-- Chart bars -->
+            <rect x="50" y="130" width="18" height="50" rx="3" fill="#f5813e" opacity="0.7"/>
+            <rect x="76" y="115" width="18" height="65" rx="3" fill="#f5813e" opacity="0.5"/>
+            <rect x="102" y="140" width="18" height="40" rx="3" fill="#f5813e" opacity="0.4"/>
+            <rect x="128" y="120" width="18" height="60" rx="3" fill="#f5813e" opacity="0.65"/>
+            <rect x="154" y="105" width="18" height="75" rx="3" fill="#f5813e" opacity="0.8"/>
+            <!-- Sidebar -->
+            <rect x="220" y="58" width="90" height="140" rx="6" fill="#1a1008" stroke="#2d2018" stroke-width="1"/>
+            <rect x="232" y="74" width="66" height="6" rx="3" fill="#5a4030"/>
+            <rect x="232" y="88" width="50" height="5" rx="2" fill="#3d2a18"/>
+            <rect x="232" y="100" width="58" height="5" rx="2" fill="#3d2a18"/>
+            <rect x="232" y="120" width="66" height="28" rx="5" fill="#f5813e" opacity="0.25"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">Product Design · SaaS</div>
+        <h3 class="card-title">Ember Analytics Dashboard</h3>
+        <p class="card-desc">End-to-end redesign of a B2B analytics platform serving 40,000 daily users. Reduced task completion time by 38% through information hierarchy restructuring.</p>
+        <div class="card-footer">
+          <span class="card-year">2024</span>
+          <a href="#contact" class="card-link">
+            View Case Study
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="project-card">
+      <div class="card-thumb thumb-2">
+        <div class="thumb-inner">
+          <svg width="100%" height="100%" viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="225" fill="url(#g2)"/>
+            <defs>
+              <linearGradient id="g2" x1="0" y1="0" x2="360" y2="225" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#06120d"/>
+                <stop offset="100%" stop-color="#0e3020"/>
+              </linearGradient>
+            </defs>
+            <!-- Brand identity mockup -->
+            <!-- Logo mark -->
+            <circle cx="180" cy="90" r="45" fill="none" stroke="#f5813e" stroke-width="2" opacity="0.3"/>
+            <circle cx="180" cy="90" r="30" fill="none" stroke="#f5813e" stroke-width="2" opacity="0.5"/>
+            <path d="M155 90 L180 60 L205 90 L180 120 Z" fill="#f5813e" opacity="0.7"/>
+            <circle cx="180" cy="90" r="8" fill="#0d0a08"/>
+            <!-- Color palette row -->
+            <rect x="60" y="160" width="36" height="36" rx="8" fill="#f5813e"/>
+            <rect x="106" y="160" width="36" height="36" rx="8" fill="#e8592a"/>
+            <rect x="152" y="160" width="36" height="36" rx="8" fill="#2d1e10"/>
+            <rect x="198" y="160" width="36" height="36" rx="8" fill="#1a1008"/>
+            <rect x="244" y="160" width="36" height="36" rx="8" fill="#f0ebe5"/>
+            <!-- Type specimen -->
+            <rect x="60" y="130" width="100" height="8" rx="4" fill="#f5813e" opacity="0.6"/>
+            <rect x="60" y="145" width="72" height="5" rx="2" fill="#3d6040" opacity="0.8"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">Brand Identity · Visual Design</div>
+        <h3 class="card-title">Solstice Brand System</h3>
+        <p class="card-desc">Comprehensive visual identity for a sustainable fintech startup: logo, colour system, typography hierarchy, and a 60-page brand guidelines document.</p>
+        <div class="card-footer">
+          <span class="card-year">2024</span>
+          <a href="#contact" class="card-link">
+            View Case Study
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="project-card">
+      <div class="card-thumb thumb-3">
+        <div class="thumb-inner">
+          <svg width="100%" height="100%" viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="225" fill="url(#g3)"/>
+            <defs>
+              <linearGradient id="g3" x1="0" y1="0" x2="360" y2="225" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#10060d"/>
+                <stop offset="100%" stop-color="#350a2e"/>
+              </linearGradient>
+            </defs>
+            <!-- Mobile app screens -->
+            <rect x="100" y="15" width="80" height="145" rx="10" fill="#1c1410" stroke="#2d2018" stroke-width="1"/>
+            <rect x="110" y="26" width="60" height="8" rx="4" fill="#f5813e" opacity="0.6"/>
+            <rect x="110" y="40" width="44" height="5" rx="2" fill="#5a4030"/>
+            <rect x="110" y="55" width="60" height="50" rx="6" fill="#2a1f14"/>
+            <rect x="115" y="60" width="30" height="4" rx="2" fill="#f5813e" opacity="0.5"/>
+            <rect x="115" y="68" width="50" height="3" rx="1" fill="#3d2a18"/>
+            <rect x="115" y="74" width="40" height="3" rx="1" fill="#3d2a18"/>
+            <circle cx="140" cy="90" r="8" fill="#f5813e" opacity="0.3"/>
+            <rect x="110" y="115" width="60" height="30" rx="5" fill="#f5813e" opacity="0.2"/>
+            <rect x="120" y="124" width="40" height="4" rx="2" fill="#f5813e" opacity="0.6"/>
+            <!-- Second screen behind -->
+            <rect x="186" y="30" width="76" height="130" rx="9" fill="#161210" stroke="#2d2018" stroke-width="1"/>
+            <rect x="196" y="45" width="56" height="6" rx="3" fill="#5a3030" opacity="0.7"/>
+            <rect x="196" y="57" width="40" height="5" rx="2" fill="#3d2020" opacity="0.6"/>
+            <rect x="196" y="73" width="56" height="65" rx="4" fill="#1a1008"/>
+            <circle cx="224" cy="105" r="16" fill="#f5813e" opacity="0.2"/>
+            <circle cx="224" cy="105" r="8" fill="#f5813e" opacity="0.4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">Mobile UX · iOS Design</div>
+        <h3 class="card-title">Hue Wellness App</h3>
+        <p class="card-desc">Intuitive mental wellness companion for iOS with mood tracking, guided exercises, and therapist connection features. Launched to 12K users in beta.</p>
+        <div class="card-footer">
+          <span class="card-year">2023</span>
+          <a href="#contact" class="card-link">
+            View Case Study
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="project-card">
+      <div class="card-thumb thumb-4">
+        <div class="thumb-inner">
+          <svg width="100%" height="100%" viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="225" fill="url(#g4)"/>
+            <defs>
+              <linearGradient id="g4" x1="0" y1="0" x2="360" y2="225" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#06100d"/>
+                <stop offset="100%" stop-color="#0a0824"/>
+              </linearGradient>
+            </defs>
+            <!-- Design system tokens visualization -->
+            <!-- Grid of tokens -->
+            <rect x="40" y="30" width="90" height="55" rx="6" fill="#1c1410" stroke="#2d2520" stroke-width="1"/>
+            <rect x="50" y="40" width="20" height="20" rx="4" fill="#f5813e"/>
+            <rect x="50" y="64" width="50" height="4" rx="2" fill="#5a4030"/>
+            <rect x="50" y="72" width="35" height="3" rx="1" fill="#3d2a18"/>
+
+            <rect x="140" y="30" width="90" height="55" rx="6" fill="#1c1410" stroke="#2d2520" stroke-width="1"/>
+            <rect x="150" y="40" width="20" height="20" rx="4" fill="#e8592a"/>
+            <rect x="150" y="64" width="50" height="4" rx="2" fill="#5a4030"/>
+            <rect x="150" y="72" width="35" height="3" rx="1" fill="#3d2a18"/>
+
+            <rect x="240" y="30" width="90" height="55" rx="6" fill="#1c1410" stroke="#2d2520" stroke-width="1"/>
+            <rect x="250" y="40" width="20" height="20" rx="4" fill="#2d1e10"/>
+            <rect x="250" y="64" width="50" height="4" rx="2" fill="#5a4030"/>
+            <rect x="250" y="72" width="35" height="3" rx="1" fill="#3d2a18"/>
+
+            <!-- Component preview -->
+            <rect x="40" y="105" width="280" height="90" rx="8" fill="#1a1008" stroke="#2d2520" stroke-width="1"/>
+            <rect x="55" y="118" width="80" height="28" rx="5" fill="#f5813e"/>
+            <rect x="55" y="152" width="80" height="28" rx="5" fill="none" stroke="#f5813e" stroke-width="1.5"/>
+            <rect x="150" y="118" width="60" height="6" rx="3" fill="#3d2a18"/>
+            <rect x="150" y="130" width="80" height="4" rx="2" fill="#2d1a10"/>
+            <rect x="150" y="140" width="70" height="4" rx="2" fill="#2d1a10"/>
+            <rect x="150" y="152" width="80" height="28" rx="5" fill="#1c1410" stroke="#2d2520" stroke-width="1"/>
+            <rect x="158" y="163" width="50" height="4" rx="2" fill="#3d2a18"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">Design Systems · Tokens</div>
+        <h3 class="card-title">Forge Design System</h3>
+        <p class="card-desc">Built a scalable design system from scratch for a 15-person product team: 400+ components, semantic token architecture, and Storybook integration.</p>
+        <div class="card-footer">
+          <span class="card-year">2023</span>
+          <a href="#contact" class="card-link">
+            View Case Study
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="project-card">
+      <div class="card-thumb thumb-5">
+        <div class="thumb-inner">
+          <svg width="100%" height="100%" viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="225" fill="url(#g5)"/>
+            <defs>
+              <linearGradient id="g5" x1="0" y1="0" x2="360" y2="225" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#150a00"/>
+                <stop offset="100%" stop-color="#3d1900"/>
+              </linearGradient>
+            </defs>
+            <!-- E-commerce product pages -->
+            <rect x="30" y="15" width="185" height="195" rx="8" fill="#1c1410" stroke="#2d2018" stroke-width="1"/>
+            <!-- Product image area -->
+            <rect x="42" y="27" width="161" height="100" rx="5" fill="#2a1f14"/>
+            <circle cx="122" cy="77" r="32" fill="#f5813e" opacity="0.2"/>
+            <circle cx="122" cy="77" r="20" fill="#f5813e" opacity="0.3"/>
+            <rect x="100" y="60" width="44" height="34" rx="4" fill="#f5813e" opacity="0.5"/>
+            <!-- Product info -->
+            <rect x="42" y="138" width="90" height="7" rx="3" fill="#f0ebe5" opacity="0.7"/>
+            <rect x="42" y="151" width="60" height="5" rx="2" fill="#5a4030"/>
+            <rect x="42" y="162" width="45" height="7" rx="3" fill="#f5813e" opacity="0.8"/>
+            <rect x="42" y="178" width="161" height="24" rx="5" fill="#f5813e" opacity="0.9"/>
+            <rect x="100" y="186" width="46" height="8" rx="2" fill="#0d0a08" opacity="0.7"/>
+            <!-- Second card -->
+            <rect x="225" y="30" width="110" height="130" rx="6" fill="#161210" stroke="#2d2018" stroke-width="1"/>
+            <rect x="235" y="40" width="90" height="60" rx="4" fill="#1a1008"/>
+            <circle cx="280" cy="70" r="18" fill="#f5813e" opacity="0.25"/>
+            <rect x="235" y="110" width="60" height="5" rx="2" fill="#f0ebe5" opacity="0.5"/>
+            <rect x="235" y="120" width="40" height="5" rx="2" fill="#f5813e" opacity="0.6"/>
+            <rect x="235" y="135" width="90" height="18" rx="4" fill="#f5813e" opacity="0.3"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">E-commerce · UX Design</div>
+        <h3 class="card-title">Cinder Shop Redesign</h3>
+        <p class="card-desc">Conversion-focused redesign of a premium ceramics e-commerce store. New product detail pages and checkout flow lifted conversion rate by 24%.</p>
+        <div class="card-footer">
+          <span class="card-year">2022</span>
+          <a href="#contact" class="card-link">
+            View Case Study
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="project-card">
+      <div class="card-thumb thumb-6">
+        <div class="thumb-inner">
+          <svg width="100%" height="100%" viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="225" fill="url(#g6)"/>
+            <defs>
+              <linearGradient id="g6" x1="0" y1="0" x2="360" y2="225" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#080610"/>
+                <stop offset="100%" stop-color="#1e0f30"/>
+              </linearGradient>
+            </defs>
+            <!-- Website / editorial design -->
+            <!-- Large hero block -->
+            <rect x="30" y="15" width="300" height="100" rx="6" fill="#1a1410" stroke="#2d2520" stroke-width="1"/>
+            <rect x="50" y="35" width="130" height="18" rx="5" fill="#f5813e" opacity="0.5"/>
+            <rect x="50" y="60" width="170" height="10" rx="4" fill="#3d3028" opacity="0.8"/>
+            <rect x="50" y="75" width="140" height="10" rx="4" fill="#3d3028" opacity="0.6"/>
+            <circle cx="248" cy="65" r="30" fill="#f5813e" opacity="0.12"/>
+            <circle cx="248" cy="65" r="18" fill="#f5813e" opacity="0.2"/>
+            <path d="M238 58 L258 65 L238 72Z" fill="#f5813e" opacity="0.7"/>
+            <rect x="50" y="95" width="70" height="14" rx="4" fill="#f5813e" opacity="0.8"/>
+            <!-- Cards row -->
+            <rect x="30" y="130" width="90" height="75" rx="5" fill="#161210" stroke="#2d2520" stroke-width="1"/>
+            <rect x="40" y="140" width="70" height="40" rx="3" fill="#1a1008"/>
+            <rect x="40" y="155" width="30" height="3" rx="1" fill="#f5813e" opacity="0.5"/>
+            <rect x="40" y="163" width="50" height="5" rx="2" fill="#3d3028"/>
+            <rect x="40" y="188" width="48" height="8" rx="3" fill="#f5813e" opacity="0.6"/>
+            <rect x="130" y="130" width="90" height="75" rx="5" fill="#161210" stroke="#2d2520" stroke-width="1"/>
+            <rect x="140" y="140" width="70" height="40" rx="3" fill="#251a1a"/>
+            <rect x="140" y="155" width="30" height="3" rx="1" fill="#f5813e" opacity="0.5"/>
+            <rect x="140" y="163" width="50" height="5" rx="2" fill="#3d3028"/>
+            <rect x="140" y="188" width="48" height="8" rx="3" fill="#f5813e" opacity="0.6"/>
+            <rect x="230" y="130" width="100" height="75" rx="5" fill="#161210" stroke="#2d2520" stroke-width="1"/>
+            <rect x="240" y="140" width="80" height="40" rx="3" fill="#1a1a25"/>
+            <rect x="240" y="155" width="30" height="3" rx="1" fill="#f5813e" opacity="0.5"/>
+            <rect x="240" y="163" width="60" height="5" rx="2" fill="#3d3028"/>
+            <rect x="240" y="188" width="48" height="8" rx="3" fill="#f5813e" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">Web Design · Editorial</div>
+        <h3 class="card-title">Dusk Magazine Platform</h3>
+        <p class="card-desc">Digital publication platform for an independent arts magazine. Art-directed responsive layouts, custom reader experience, and newsletter integration.</p>
+        <div class="card-footer">
+          <span class="card-year">2022</span>
+          <a href="#contact" class="card-link">
+            View Case Study
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONTACT FOOTER -->
+<footer id="contact" class="contact-section">
+  <div class="contact-glow"></div>
+
+  <div class="contact-inner">
+
+    <div class="contact-left">
+      <div class="section-label" style="margin-bottom:20px;">Let's Connect</div>
+      <h2 class="contact-heading">Have a project<br>in <em>mind?</em></h2>
+      <p class="contact-subtext">
+        I'm currently taking on select freelance projects for Q3 2025. Whether you need a full product redesign, a brand refresh, or a design system built from the ground up — let's talk.
+      </p>
+
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M3 4h12a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="#f5813e" stroke-width="1.4" stroke-linecap="round"/>
+              <path d="M2 5l7 5 7-5" stroke="#f5813e" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-info-label">Email</span>
+            <span class="contact-info-val">mara@vesperstudio.design</span>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9 2C6.24 2 4 4.24 4 7c0 4.25 5 9 5 9s5-4.75 5-9c0-2.76-2.24-5-5-5z" stroke="#f5813e" stroke-width="1.4"/>
+              <circle cx="9" cy="7" r="2" stroke="#f5813e" stroke-width="1.4"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-info-label">Location</span>
+            <span class="contact-info-val">Amsterdam, Netherlands</span>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="#f5813e" stroke-width="1.4"/>
+              <path d="M9 5v4l3 2" stroke="#f5813e" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-info-label">Availability</span>
+            <span class="contact-info-val">Open to new work · Aug

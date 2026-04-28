@@ -1,0 +1,24 @@
+{
+  "archetype": "portfolio",
+  "style": "dark-saas",
+  "base_seed": 22,
+  "attempt": 1,
+  "attempt_seed": 22001,
+  "model": "claude-sonnet-4-6",
+  "elapsed_sec": 184.82,
+  "png": {
+    "width": 1280,
+    "height": 3957,
+    "size_bytes": 831947,
+    "mean_rgb": [
+      24.6,
+      18.8,
+      15.3
+    ],
+    "stddev_rgb": [
+      32.3,
+      25.3,
+      22.6
+    ]
+  }
+}
