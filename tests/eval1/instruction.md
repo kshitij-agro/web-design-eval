@@ -6,7 +6,7 @@ faithfully as possible using HTML and CSS.
 ## Input
 
 - `/app/reference.png` — a full-page screenshot of the target design, rendered
-  at a 1280px viewport width. Open it with the `Read` tool to view it as an
+  at a 1280px viewport width and 900px height. Open it with the `Read` tool to view it as an
   image. You may re-read it at any point if you need to recheck details.
 
 ## Output
@@ -69,5 +69,5 @@ threshold — closer to 1.0 is better.
    page.
 4. Re-read the reference image as needed to verify details you may have
    missed.
-5. After you are satisfied with the result and want to quit, keep running in a loop for 
-   2 minutes so that I can copy the html that has been generated
+5. Take a final screenshot and name it submission.png. The folder where this file
+   exists is /app/output
