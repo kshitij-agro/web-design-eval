@@ -15,4 +15,6 @@ RUN playwright install --with-deps chromium
 
 COPY recipe /app/recipe
 
+COPY reference.png /app/reference.png
+
 WORKDIR /app

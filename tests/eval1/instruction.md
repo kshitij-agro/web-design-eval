@@ -69,3 +69,5 @@ threshold — closer to 1.0 is better.
    page.
 4. Re-read the reference image as needed to verify details you may have
    missed.
+5. After you are satisfied with the result and want to quit, keep running in a loop for 
+   2 minutes so that I can copy the html that has been generated
